@@ -78,6 +78,92 @@ h1 i {
     min-width: 200px;
 }
 
+#summary > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+#summary h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+#summary p {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+    color: #e74c3c;
+}
+
+#summary i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #3498db;
+}
+
+.progress-bar {
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    height: 10px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.progress-bar div {
+    background-color: #2ecc71;
+    height: 100%;
+    width: 0;
+    transition: width 0.5s ease-in-out;
+}
+
+#activities, #goals, #charts, #history, #achievements {
+    background-color: #fff;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+#activity-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+#activity-list li {
+    background-color: #ecf0f1;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+#activity-list li:hover {
+    background-color: #e0e0e0;
+}
+
+#activity-list li button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#activity-list li button:hover {
+    background-color: #c0392b;
+}
+
+#add-activity {
+    display: flex;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
 #add-activity input, #add-activity select {
     flex: 1;
     margin-right: 0.5rem;
@@ -111,43 +197,7 @@ h1 i {
     margin-bottom: 0.5rem;
 }
 
-#goals input, #history-date {body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-
-
-footer {
-    background-color: #2c3e50;
-    color: #ecf0f1;
-    text-align: center;
-    padding: 1rem;
-    margin-top: 2rem;
-}
-
-@media (max-width: 768px) {
-    #summary {
-        flex-direction: column;
-    }
-
-    #summary > div {
-        margin: 0.5rem 0;
-    }
-
-    #add-activity {
-        flex-direction: column;
-    }
-
-    #add-activity input, #add-activity select {
-        margin-right: 0;
-        margin-bottom: 0.5rem;
-    }
-}
+#goals input, #history-date {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;

@@ -1,3 +1,4 @@
+// Initialize fitness data
 let fitnessData = {
     caloriesBurned: 0,
     stepsTaken: 0,
@@ -12,6 +13,7 @@ let fitnessData = {
     achievements: []
 };
 
+// Function to update the dashboard
 function updateDashboard() {
     document.getElementById('calories-value').textContent = fitnessData.caloriesBurned;
     document.getElementById('steps-value').textContent = fitnessData.stepsTaken;
@@ -23,6 +25,7 @@ function updateDashboard() {
     checkAchievements();
 }
 
+// Function to update the activity list
 function updateActivityList() {
     const activityList = document.getElementById('activity-list');
     activityList.innerHTML = '';
@@ -36,6 +39,7 @@ function updateActivityList() {
     });
 }
 
+// Function to add a new activity
 function addActivity(name, duration, intensity) {
     fitnessData.activities.push({ name, duration, intensity });
     fitnessData.activeMinutes += duration;
@@ -62,6 +66,7 @@ function addActivity(name, duration, intensity) {
     saveToHistory();
 }
 
+// Function to remove an activity
 function removeActivity(index) {
     const removedActivity = fitnessData.activities.splice(index, 1)[0];
     fitnessData.activeMinutes -= removedActivity.duration;
@@ -89,6 +94,7 @@ function removeActivity(index) {
     saveToHistory();
 }
 
+// Function to set goals
 function setGoals(calories, steps, activeMinutes) {
     fitnessData.goals.calories = calories;
     fitnessData.goals.steps = steps;
@@ -97,6 +103,7 @@ function setGoals(calories, steps, activeMinutes) {
     saveToLocalStorage();
 }
 
+// Function to update goal progress
 function updateGoalProgress() {
     const calorieGoal = document.getElementById('calorie-goal-input');
     const stepGoal = document.getElementById('step-goal-input');
@@ -111,17 +118,20 @@ function updateGoalProgress() {
     updateProgressBar('active-minutes-progress', fitnessData.activeMinutes, fitnessData.goals.activeMinutes);
 }
 
+// Function to update progress bars
 function updateProgressBar(id, value, goal) {
     const progressBar = document.getElementById(id);
     const percentage = Math.min((value / goal) * 100, 100);
     progressBar.innerHTML = `<div style="width: ${percentage}%"></div>`;
 }
 
+// Function to update the charts
 function updateCharts() {
     updateActivityChart();
     updateWeeklyProgressChart();
 }
 
+// Function to update the activity chart
 function updateActivityChart() {
     const ctx = document.getElementById('activity-chart').getContext('2d');
     const activityData = fitnessData.activities.map(activity => activity.duration);
@@ -162,6 +172,7 @@ function updateActivityChart() {
     });
 }
 
+// Function to update the weekly progress chart
 function updateWeeklyProgressChart() {
     const ctx = document.getElementById('weekly-progress-chart').getContext('2d');
     const weeklyData = getWeeklyData();
@@ -206,6 +217,7 @@ function updateWeeklyProgressChart() {
     });
 }
 
+// Function to get weekly data for the chart
 function getWeeklyData() {
     const today = new Date();
     const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
@@ -228,6 +240,7 @@ function getWeeklyData() {
     return { labels, calories, steps, activeMinutes };
 }
 
+// Function to save current data to history
 function saveToHistory() {
     const today = new Date().toISOString().split('T')[0];
     fitnessData.history[today] = {
@@ -239,6 +252,7 @@ function saveToHistory() {
     saveToLocalStorage();
 }
 
+// Function to load data from history
 function loadHistory(date) {
     const historyData = fitnessData.history[date];
     if (historyData) {
@@ -260,6 +274,7 @@ function loadHistory(date) {
     }
 }
 
+// Function to check and update achievements
 function checkAchievements() {
     const newAchievements = [];
 
@@ -287,6 +302,7 @@ function checkAchievements() {
     }
 }
 
+// Function to update achievements display
 function updateAchievements() {
     const achievementList = document.getElementById('achievement-list');
     achievementList.innerHTML = '';
@@ -301,10 +317,12 @@ function updateAchievements() {
     });
 }
 
+// Function to save data to local storage
 function saveToLocalStorage() {
     localStorage.setItem('fitnessData', JSON.stringify(fitnessData));
 }
 
+// Function to load data from local storage
 function loadFromLocalStorage() {
     const storedData = localStorage.getItem('fitnessData');
     if (storedData) {
@@ -312,6 +330,7 @@ function loadFromLocalStorage() {
     }
 }
 
+// Event listener for adding activities
 document.getElementById('add-activity-btn').addEventListener('click', () => {
     const name = document.getElementById('activity-name').value;
     const duration = parseInt(document.getElementById('activity-duration').value);
@@ -324,6 +343,7 @@ document.getElementById('add-activity-btn').addEventListener('click', () => {
     }
 });
 
+// Event listener for setting goals
 document.getElementById('set-goals-btn').addEventListener('click', () => {
     const calories = parseInt(document.getElementById('calorie-goal-input').value);
     const steps = parseInt(document.getElementById('step-goal-input').value);
@@ -331,14 +351,17 @@ document.getElementById('set-goals-btn').addEventListener('click', () => {
     setGoals(calories, steps, activeMinutes);
 });
 
+// Event listener for loading history
 document.getElementById('load-history-btn').addEventListener('click', () => {
     const date = document.getElementById('history-date').value;
     loadHistory(date);
 });
 
+// Function to initialize the dashboard
 function initDashboard() {
     loadFromLocalStorage();
     updateDashboard();
 }
 
+// Initialize the dashboard
 initDashboard();
