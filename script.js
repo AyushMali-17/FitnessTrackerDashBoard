@@ -8,7 +8,8 @@ let fitnessData = {
         steps: 10000,
         activeMinutes: 60
     },
-    history: {}
+    history: {},
+    achievements: []
 };
 
 function updateDashboard() {
@@ -18,7 +19,8 @@ function updateDashboard() {
 
     updateActivityList();
     updateGoalProgress();
-    updateChart();
+    updateCharts();
+    checkAchievements();
 }
 
 function updateActivityList() {
@@ -80,6 +82,7 @@ function removeActivity(index) {
     }
     
     fitnessData.caloriesBurned -= Math.floor(removedActivity.duration * calorieMultiplier);
+    fitnessData.caloriesBurned -= Math.floor(removedActivity.duration * calorieMultiplier);
     fitnessData.stepsTaken -= Math.floor(removedActivity.duration * 100 * (removedActivity.intensity === 'high' ? 1.5 : removedActivity.intensity === 'low' ? 0.5 : 1));
     
     updateDashboard();
@@ -91,6 +94,7 @@ function setGoals(calories, steps, activeMinutes) {
     fitnessData.goals.steps = steps;
     fitnessData.goals.activeMinutes = activeMinutes;
     updateGoalProgress();
+    saveToLocalStorage();
 }
 
 function updateGoalProgress() {
@@ -113,7 +117,12 @@ function updateProgressBar(id, value, goal) {
     progressBar.innerHTML = `<div style="width: ${percentage}%"></div>`;
 }
 
-function updateChart() {
+function updateCharts() {
+    updateActivityChart();
+    updateWeeklyProgressChart();
+}
+
+function updateActivityChart() {
     const ctx = document.getElementById('activity-chart').getContext('2d');
     const activityData = fitnessData.activities.map(activity => activity.duration);
     const activityLabels = fitnessData.activities.map(activity => activity.name);
@@ -153,6 +162,72 @@ function updateChart() {
     });
 }
 
+function updateWeeklyProgressChart() {
+    const ctx = document.getElementById('weekly-progress-chart').getContext('2d');
+    const weeklyData = getWeeklyData();
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: weeklyData.labels,
+            datasets: [
+                {
+                    label: 'Calories Burned',
+                    data: weeklyData.calories,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true
+                },
+                {
+                    label: 'Steps Taken',
+                    data: weeklyData.steps,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true
+                },
+                {
+                    label: 'Active Minutes',
+                    data: weeklyData.activeMinutes,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    fill: true
+                }
+            ]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+function getWeeklyData() {
+    const today = new Date();
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const labels = [];
+    const calories = [];
+    const steps = [];
+    const activeMinutes = [];
+
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(weekAgo.getTime() + i * 24 * 60 * 60 * 1000);
+        const dateString = date.toISOString().split('T')[0];
+        labels.push(dateString);
+
+        const dayData = fitnessData.history[dateString] || { caloriesBurned: 0, stepsTaken: 0, activeMinutes: 0 };
+        calories.push(dayData.caloriesBurned);
+        steps.push(dayData.stepsTaken);
+        activeMinutes.push(dayData.activeMinutes);
+    }
+
+    return { labels, calories, steps, activeMinutes };
+}
+
 function saveToHistory() {
     const today = new Date().toISOString().split('T')[0];
     fitnessData.history[today] = {
@@ -161,7 +236,7 @@ function saveToHistory() {
         activeMinutes: fitnessData.activeMinutes,
         activities: [...fitnessData.activities]
     };
-    localStorage.setItem('fitnessData', JSON.stringify(fitnessData));
+    saveToLocalStorage();
 }
 
 function loadHistory(date) {
@@ -182,6 +257,58 @@ function loadHistory(date) {
         `;
     } else {
         document.getElementById('history-data').innerHTML = '<p>No data available for this date.</p>';
+    }
+}
+
+function checkAchievements() {
+    const newAchievements = [];
+
+    if (fitnessData.caloriesBurned >= 1000 && !fitnessData.achievements.includes('1000 Calories Burned')) {
+        newAchievements.push('1000 Calories Burned');
+    }
+
+    if (fitnessData.stepsTaken >= 10000 && !fitnessData.achievements.includes('10,000 Steps')) {
+        newAchievements.push('10,000 Steps');
+    }
+
+    if (fitnessData.activeMinutes >= 60 && !fitnessData.achievements.includes('60 Active Minutes')) {
+        newAchievements.push('60 Active Minutes');
+    }
+
+    if (fitnessData.activities.length >= 5 && !fitnessData.achievements.includes('5 Activities Completed')) {
+        newAchievements.push('5 Activities Completed');
+    }
+
+    fitnessData.achievements = [...fitnessData.achievements, ...newAchievements];
+    updateAchievements();
+    
+    if (newAchievements.length > 0) {
+        alert(`Congratulations! You've earned new achievements: ${newAchievements.join(', ')}`);
+    }
+}
+
+function updateAchievements() {
+    const achievementList = document.getElementById('achievement-list');
+    achievementList.innerHTML = '';
+    fitnessData.achievements.forEach(achievement => {
+        const div = document.createElement('div');
+        div.className = 'achievement';
+        div.innerHTML = `
+            <i class="fas fa-trophy"></i>
+            <h3>${achievement}</h3>
+        `;
+        achievementList.appendChild(div);
+    });
+}
+
+function saveToLocalStorage() {
+    localStorage.setItem('fitnessData', JSON.stringify(fitnessData));
+}
+
+function loadFromLocalStorage() {
+    const storedData = localStorage.getItem('fitnessData');
+    if (storedData) {
+        fitnessData = JSON.parse(storedData);
     }
 }
 
@@ -210,10 +337,7 @@ document.getElementById('load-history-btn').addEventListener('click', () => {
 });
 
 function initDashboard() {
-    const storedData = localStorage.getItem('fitnessData');
-    if (storedData) {
-        fitnessData = JSON.parse(storedData);
-    }
+    loadFromLocalStorage();
     updateDashboard();
 }
 
