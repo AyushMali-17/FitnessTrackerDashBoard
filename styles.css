@@ -15,9 +15,32 @@ header {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+nav ul li {
+    margin: 0 1rem;
+}
+
+nav ul li a {
+    color: #ecf0f1;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #3498db;
+}
+
 main {
     padding: 2rem;
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -68,7 +91,22 @@ h1 i {
     color: #3498db;
 }
 
-#activities, #goals {
+.progress-bar {
+    background-color: #ecf0f1;
+    border-radius: 5px;
+    height: 10px;
+    margin-top: 1rem;
+    overflow: hidden;
+}
+
+.progress-bar div {
+    background-color: #2ecc71;
+    height: 100%;
+    width: 0;
+    transition: width 0.5s ease-in-out;
+}
+
+#activities, #goals, #charts {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -86,6 +124,18 @@ h1 i {
     margin-bottom: 0.5rem;
     padding: 0.5rem 1rem;
     border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#activity-list li button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
 #add-activity {
@@ -129,6 +179,12 @@ h1 i {
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+
+.chart-container {
+    position: relative;
+    height: 300px;
+    width: 100%;
 }
 
 footer {
