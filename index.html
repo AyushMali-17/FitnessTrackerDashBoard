@@ -37,75 +37,46 @@
                 <p id="steps-value">0</p>
                 <div class="progress-bar" id="steps-progress"></div>
             </div>
-            <div id="active-minutes">
-                <i class="fas fa-stopwatch"></i>
-                <h3>Active Minutes</h3>
-                <p id="active-minutes-value">0</p>
-                <div class="progress-bar" id="active-minutes-progress"></div>
-            </div>
         </section>
         <section id="activities">
             <h2>Activities</h2>
-            <div id="add-activity">
-                <input type="text" id="activity-name" placeholder="Activity name">
-                <input type="number" id="activity-duration" placeholder="Duration (minutes)">
-                <select id="activity-intensity">
-                    <option value="low">Low Intensity</option>
-                    <option value="medium">Medium Intensity</option>
-                    <option value="high">High Intensity</option>
-                </select>
-                <button id="add-activity-btn">Add Activity</button>
+            <div id="activity-log">
+                <form id="activity-form">
+                    <input type="text" id="activity-input" placeholder="Log a new activity" required>
+                    <button type="submit"><i class="fas fa-plus"></i></button>
+                </form>
+                <ul id="activity-list"></ul>
             </div>
-            <ul id="activity-list">
-                <!-- Activities will be added here dynamically -->
-            </ul>
         </section>
         <section id="goals">
-            <h2>Daily Goals</h2>
-            <div id="calorie-goal">
-                <label for="calorie-goal-input">Calorie Goal:</label>
-                <input type="number" id="calorie-goal-input" placeholder="Enter calorie goal">
+            <h2>Goals</h2>
+            <div id="goal-setting">
+                <form id="goal-form">
+                    <input type="text" id="goal-input" placeholder="Set a new goal" required>
+                    <button type="submit"><i class="fas fa-plus"></i></button>
+                </form>
+                <ul id="goal-list"></ul>
             </div>
-            <div id="step-goal">
-                <label for="step-goal-input">Step Goal:</label>
-                <input type="number" id="step-goal-input" placeholder="Enter step goal">
-            </div>
-            <div id="active-minutes-goal">
-                <label for="active-minutes-goal-input">Active Minutes Goal:</label>
-                <input type="number" id="active-minutes-goal-input" placeholder="Enter active minutes goal">
-            </div>
-            <button id="set-goals-btn">Set Goals</button>
         </section>
         <section id="charts">
-            <h2>Activity Charts</h2>
-            <div class="chart-container">
-                <canvas id="activity-chart"></canvas>
-            </div>
-            <div class="chart-container">
-                <canvas id="weekly-progress-chart"></canvas>
-            </div>
+            <h2>Progress Charts</h2>
+            <canvas id="progressChart"></canvas>
         </section>
         <section id="history">
             <h2>Activity History</h2>
-            <div id="date-selector">
-                <label for="history-date">Select Date:</label>
-                <input type="date" id="history-date">
-                <button id="load-history-btn">Load History</button>
-            </div>
-            <div id="history-data">
-                <!-- Historical data will be displayed here -->
-            </div>
+            <ul id="history-list"></ul>
         </section>
         <section id="achievements">
             <h2>Achievements</h2>
             <div id="achievement-list">
-                <!-- Achievements will be displayed here -->
+                <!-- Achievements will be dynamically added here -->
             </div>
         </section>
+        <section id="motivational-quotes">
+            <h2>Motivational Quotes</h2>
+            <p id="quote"></p>
+        </section>
     </main>
-    <footer>
-        <p>&copy; 2024 Fitness Tracker. All rights reserved.</p>
-    </footer>
-    <script src="script.js"></script>
+    <script src="scripts.js"></script>
 </body>
 </html>
