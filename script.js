@@ -7,7 +7,8 @@ let fitnessData = {
         calories: 2000,
         steps: 10000,
         activeMinutes: 60
-    }
+    },
+    history: {}
 };
 
 function updateDashboard() {
@@ -26,27 +27,63 @@ function updateActivityList() {
     fitnessData.activities.forEach((activity, index) => {
         const li = document.createElement('li');
         li.innerHTML = `
-            ${activity.name} - ${activity.duration} minutes
+            ${activity.name} - ${activity.duration} minutes (${activity.intensity} intensity)
             <button onclick="removeActivity(${index})">Remove</button>
         `;
         activityList.appendChild(li);
     });
 }
 
-function addActivity(name, duration) {
-    fitnessData.activities.push({ name, duration });
+function addActivity(name, duration, intensity) {
+    fitnessData.activities.push({ name, duration, intensity });
     fitnessData.activeMinutes += duration;
-    fitnessData.caloriesBurned += Math.floor(duration * 5); 
-    fitnessData.stepsTaken += Math.floor(duration * 100); 
+    
+    let calorieMultiplier;
+    switch (intensity) {
+        case 'low':
+            calorieMultiplier = 3;
+            break;
+        case 'medium':
+            calorieMultiplier = 5;
+            break;
+        case 'high':
+            calorieMultiplier = 7;
+            break;
+        default:
+            calorieMultiplier = 5;
+    }
+    
+    fitnessData.caloriesBurned += Math.floor(duration * calorieMultiplier);
+    fitnessData.stepsTaken += Math.floor(duration * 100 * (intensity === 'high' ? 1.5 : intensity === 'low' ? 0.5 : 1));
+    
     updateDashboard();
+    saveToHistory();
 }
 
 function removeActivity(index) {
     const removedActivity = fitnessData.activities.splice(index, 1)[0];
     fitnessData.activeMinutes -= removedActivity.duration;
-    fitnessData.caloriesBurned -= Math.floor(removedActivity.duration * 5);
-    fitnessData.stepsTaken -= Math.floor(removedActivity.duration * 100);
+    
+    let calorieMultiplier;
+    switch (removedActivity.intensity) {
+        case 'low':
+            calorieMultiplier = 3;
+            break;
+        case 'medium':
+            calorieMultiplier = 5;
+            break;
+        case 'high':
+            calorieMultiplier = 7;
+            break;
+        default:
+            calorieMultiplier = 5;
+    }
+    
+    fitnessData.caloriesBurned -= Math.floor(removedActivity.duration * calorieMultiplier);
+    fitnessData.stepsTaken -= Math.floor(removedActivity.duration * 100 * (removedActivity.intensity === 'high' ? 1.5 : removedActivity.intensity === 'low' ? 0.5 : 1));
+    
     updateDashboard();
+    saveToHistory();
 }
 
 function setGoals(calories, steps, activeMinutes) {
@@ -88,7 +125,18 @@ function updateChart() {
             datasets: [{
                 label: 'Activity Duration (minutes)',
                 data: activityData,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                backgroundColor: fitnessData.activities.map(activity => {
+                    switch (activity.intensity) {
+                        case 'low':
+                            return 'rgba(75, 192, 192, 0.6)';
+                        case 'medium':
+                            return 'rgba(255, 206, 86, 0.6)';
+                        case 'high':
+                            return 'rgba(255, 99, 132, 0.6)';
+                        default:
+                            return 'rgba(75, 192, 192, 0.6)';
+                    }
+                }),
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1
             }]
@@ -105,13 +153,47 @@ function updateChart() {
     });
 }
 
+function saveToHistory() {
+    const today = new Date().toISOString().split('T')[0];
+    fitnessData.history[today] = {
+        caloriesBurned: fitnessData.caloriesBurned,
+        stepsTaken: fitnessData.stepsTaken,
+        activeMinutes: fitnessData.activeMinutes,
+        activities: [...fitnessData.activities]
+    };
+    localStorage.setItem('fitnessData', JSON.stringify(fitnessData));
+}
+
+function loadHistory(date) {
+    const historyData = fitnessData.history[date];
+    if (historyData) {
+        const historyDiv = document.getElementById('history-data');
+        historyDiv.innerHTML = `
+            <h3>Data for ${date}</h3>
+            <p>Calories Burned: ${historyData.caloriesBurned}</p>
+            <p>Steps Taken: ${historyData.stepsTaken}</p>
+            <p>Active Minutes: ${historyData.activeMinutes}</p>
+            <h4>Activities:</h4>
+            <ul>
+                ${historyData.activities.map(activity => `
+                    <li>${activity.name} - ${activity.duration} minutes (${activity.intensity} intensity)</li>
+                `).join('')}
+            </ul>
+        `;
+    } else {
+        document.getElementById('history-data').innerHTML = '<p>No data available for this date.</p>';
+    }
+}
+
 document.getElementById('add-activity-btn').addEventListener('click', () => {
     const name = document.getElementById('activity-name').value;
     const duration = parseInt(document.getElementById('activity-duration').value);
+    const intensity = document.getElementById('activity-intensity').value;
     if (name && duration) {
-        addActivity(name, duration);
+        addActivity(name, duration, intensity);
         document.getElementById('activity-name').value = '';
         document.getElementById('activity-duration').value = '';
+        document.getElementById('activity-intensity').value = 'low';
     }
 });
 
@@ -122,4 +204,17 @@ document.getElementById('set-goals-btn').addEventListener('click', () => {
     setGoals(calories, steps, activeMinutes);
 });
 
-updateDashboard();
+document.getElementById('load-history-btn').addEventListener('click', () => {
+    const date = document.getElementById('history-date').value;
+    loadHistory(date);
+});
+
+function initDashboard() {
+    const storedData = localStorage.getItem('fitnessData');
+    if (storedData) {
+        fitnessData = JSON.parse(storedData);
+    }
+    updateDashboard();
+}
+
+initDashboard();

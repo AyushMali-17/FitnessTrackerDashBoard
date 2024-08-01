@@ -13,6 +13,9 @@ header {
     text-align: center;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 nav ul {
@@ -106,7 +109,7 @@ h1 i {
     transition: width 0.5s ease-in-out;
 }
 
-#activities, #goals, #charts {
+#activities, #goals, #charts, #history {
     background-color: #fff;
     padding: 1.5rem;
     border-radius: 10px;
@@ -143,7 +146,7 @@ h1 i {
     margin-bottom: 1rem;
 }
 
-#add-activity input {
+#add-activity input, #add-activity select {
     flex: 1;
     margin-right: 0.5rem;
     padding: 0.5rem;
@@ -151,7 +154,7 @@ h1 i {
     border-radius: 5px;
 }
 
-#add-activity button, #set-goals-btn {
+#add-activity button, #set-goals-btn, #load-history-btn {
     background-color: #2ecc71;
     color: white;
     border: none;
@@ -161,20 +164,20 @@ h1 i {
     transition: background-color 0.3s ease;
 }
 
-#add-activity button:hover, #set-goals-btn:hover {
+#add-activity button:hover, #set-goals-btn:hover, #load-history-btn:hover {
     background-color: #27ae60;
 }
 
-#goals div {
+#goals div, #date-selector {
     margin-bottom: 1rem;
 }
 
-#goals label {
+#goals label, #date-selector label {
     display: block;
     margin-bottom: 0.5rem;
 }
 
-#goals input {
+#goals input, #history-date {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid #ccc;
@@ -187,6 +190,10 @@ h1 i {
     width: 100%;
 }
 
+#history-data {
+    margin-top: 1rem;
+}
+
 footer {
     background-color: #2c3e50;
     color: #ecf0f1;
@@ -195,4 +202,23 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    #summary {
+        flex-direction: column;
+    }
+
+    #summary > div {
+        margin: 0.5rem 0;
+    }
+
+    #add-activity {
+        flex-direction: column;
+    }
+
+    #add-activity input, #add-activity select {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
 }

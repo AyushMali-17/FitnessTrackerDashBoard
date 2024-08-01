@@ -17,6 +17,7 @@
                 <li><a href="#activities">Activities</a></li>
                 <li><a href="#goals">Goals</a></li>
                 <li><a href="#charts">Charts</a></li>
+                <li><a href="#history">History</a></li>
             </ul>
         </nav>
     </header>
@@ -47,6 +48,11 @@
             <div id="add-activity">
                 <input type="text" id="activity-name" placeholder="Activity name">
                 <input type="number" id="activity-duration" placeholder="Duration (minutes)">
+                <select id="activity-intensity">
+                    <option value="low">Low Intensity</option>
+                    <option value="medium">Medium Intensity</option>
+                    <option value="high">High Intensity</option>
+                </select>
                 <button id="add-activity-btn">Add Activity</button>
             </div>
             <ul id="activity-list">
@@ -73,6 +79,17 @@
             <h2>Activity Charts</h2>
             <div class="chart-container">
                 <canvas id="activity-chart"></canvas>
+            </div>
+        </section>
+        <section id="history">
+            <h2>Activity History</h2>
+            <div id="date-selector">
+                <label for="history-date">Select Date:</label>
+                <input type="date" id="history-date">
+                <button id="load-history-btn">Load History</button>
+            </div>
+            <div id="history-data">
+                <!-- Historical data will be displayed here -->
             </div>
         </section>
     </main>
