@@ -5,77 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fitness Tracker Dashboard</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>Fitness Tracker Dashboard</h1>
+        <h1><i class="fas fa-heartbeat"></i> Fitness Tracker Dashboard</h1>
     </header>
     <main>
         <section id="summary">
             <h2>Daily Summary</h2>
             <div id="calories-burned">
+                <i class="fas fa-fire"></i>
                 <h3>Calories Burned</h3>
                 <p id="calories-value">0</p>
             </div>
             <div id="steps-taken">
+                <i class="fas fa-shoe-prints"></i>
                 <h3>Steps Taken</h3>
                 <p id="steps-value">0</p>
             </div>
             <div id="active-minutes">
+                <i class="fas fa-stopwatch"></i>
                 <h3>Active Minutes</h3>
                 <p id="active-minutes-value">0</p>
             </div>
         </section>
         <section id="activities">
             <h2>Activities</h2>
+            <div id="add-activity">
+                <input type="text" id="activity-name" placeholder="Activity name">
+                <input type="number" id="activity-duration" placeholder="Duration (minutes)">
+                <button id="add-activity-btn">Add Activity</button>
+            </div>
             <ul id="activity-list">
                 <!-- Activities will be added here dynamically -->
             </ul>
         </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Fitness Tracker. All rights reserved.</p>
-    </footer><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fitness Tracker Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <header>
-        <h1>Fitness Tracker Dashboard</h1>
-    </header>
-    <main>
-        <section id="summary">
-            <h2>Daily Summary</h2>
-            <div id="calories-burned">
-                <h3>Calories Burned</h3>
-                <p id="calories-value">0</p>
+        <section id="goals">
+            <h2>Daily Goals</h2>
+            <div id="calorie-goal">
+                <label for="calorie-goal-input">Calorie Goal:</label>
+                <input type="number" id="calorie-goal-input" placeholder="Enter calorie goal">
             </div>
-            <div id="steps-taken">
-                <h3>Steps Taken</h3>
-                <p id="steps-value">0</p>
+            <div id="step-goal">
+                <label for="step-goal-input">Step Goal:</label>
+                <input type="number" id="step-goal-input" placeholder="Enter step goal">
             </div>
-            <div id="active-minutes">
-                <h3>Active Minutes</h3>
-                <p id="active-minutes-value">0</p>
+            <div id="active-minutes-goal">
+                <label for="active-minutes-goal-input">Active Minutes Goal:</label>
+                <input type="number" id="active-minutes-goal-input" placeholder="Enter active minutes goal">
             </div>
-        </section>
-        <section id="activities">
-            <h2>Activities</h2>
-            <ul id="activity-list">
-                <!-- Activities will be added here dynamically -->
-            </ul>
+            <button id="set-goals-btn">Set Goals</button>
         </section>
     </main>
     <footer>
         <p>&copy; 2024 Fitness Tracker. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
-</body>
-</html>
     <script src="script.js"></script>
 </body>
 </html>
